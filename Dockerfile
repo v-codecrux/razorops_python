@@ -1,15 +1,14 @@
-FROM python:3.6
+FROM alpine:3.1
 
-# Create app directory
-WORKDIR /app
+# Update
+RUN apk add --update python py-pip
 
 # Install app dependencies
-COPY src/requirements.txt ./
-
-RUN pip install -r requirements.txt
+RUN pip install Flask
 
 # Bundle app source
-COPY src /app
+COPY /src/server.py /src/server.py
 
-EXPOSE 80
-CMD [ "python", "server.py" ]
+EXPOSE  80
+
+CMD ["python", "/src/server.py", "-p 80"]
