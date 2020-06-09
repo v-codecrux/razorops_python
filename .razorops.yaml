@@ -1,24 +1,13 @@
 tasks:
   build-image:
     type: build
-    image: '812487724357.dkr.ecr.ap-south-1.amazonaws.com/php'
+    image: razorops_python
     tags:
       - latest
       - ${CI_COMMIT_SHA:0:8}
-    push: true
 
-  deploy-k8s:
-    image: lachlanevenson/k8s-kubectl:v1.11.8
-    environment:
-      name: prod
-      cluster:
-        name: php-demo
-    variables:
-      - DOCKER_TAG=${CI_COMMIT_SHA:0:8}
-    commands:
-      - kubectl -n default set image deployment.v1.apps/php php=812487724357.dkr.ecr.ap-south-1.amazonaws.com/php:$DOCKER_TAG
 
 workflow:
   - name: production
-    tasks: [build-image, deploy-k8s]
+    tasks: [build-image]
     when: branch == "master"
